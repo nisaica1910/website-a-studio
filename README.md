@@ -1,22 +1,35 @@
-# A STUDIO — Company Profile (Flask)
+# A STUDIO — Company Profile
 
-## Jalankan lokal
-```
-python -m venv venv && source venv/bin/activate      # Windows: venv\Scripts\activate
+A company profile website built with **Python Flask** to showcase company information, projects, and portfolio.
+
+## Features
+- Company profile and portfolio showcase
+- Admin dashboard for content management
+- Project and category management
+- Image upload and automatic resizing
+- SQLite database support
+
+## Tech Stack
+- Python & Flask
+- SQLite
+- HTML, CSS, JavaScript
+
+## Installation
+
+```bash
+git clone <YOUR_REPOSITORY_URL>
+cd <YOUR_PROJECT_FOLDER>
+python -m venv venv
+venv\Scripts\activate
 pip install -r requirements.txt
-flask --app app seed-demo      # (opsional) isi 9 proyek contoh
-python app.py                  # buka http://127.0.0.1:5000
+python app.py
 ```
-Admin: http://127.0.0.1:5002/admin  (default `admin` / `admin12345` — langsung ganti di Pengaturan)
 
-## Akses developer (backend)
-- Buat/reset admin : `flask --app app create-admin <username>`
-- Database SQLite  : `instance/astudio.db` (buka pakai DB Browser for SQLite)
-- Kategori baru    : tambah di `CATEGORIES` (models.py)
-- Field pengaturan : tambah di `SETTING_FIELDS` (models.py), otomatis muncul di admin
-- Foto upload      : `static/uploads/` (otomatis di-resize max 1920px)
+Open the local URL displayed by the application.
 
-## Production
-Set env: `SECRET_KEY`, `DATABASE_URL` (opsional), `ADMIN_USER`, `ADMIN_PASS`
-Jalankan: `gunicorn app:app`
-Backup rutin: `instance/astudio.db` + folder `static/uploads/`
+## Security
+Do not commit passwords, secret keys, personal data, or private database files to the repository.
+
+---
+
+Built with Python Flask.
