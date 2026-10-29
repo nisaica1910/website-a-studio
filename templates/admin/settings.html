@@ -1,0 +1,24 @@
+{% extends "admin/base.html" %}
+{% block title %}Pengaturan{% endblock %}
+{% block content %}
+<div class="topbar"><h1>Pengaturan Website</h1></div>
+
+<form method="post" class="panel form-grid">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  {% for key, label, kind, default in fields %}
+  <label class="{{ 'full' if kind == 'textarea' else '' }}">{{ label }}
+    {% if kind == 'textarea' %}<textarea name="{{ key }}" rows="{{ 7 if key == 'about_text' else 3 }}">{{ S[key] }}</textarea>
+    {% else %}<input name="{{ key }}" value="{{ S[key] }}">{% endif %}
+  </label>
+  {% endfor %}
+  <div class="full"><button class="btn btn-gold">Simpan Pengaturan</button></div>
+</form>
+
+<form method="post" action="{{ url_for('admin_password') }}" class="panel form-grid">
+  <h2 class="full">Ganti Password</h2>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+  <label>Password lama<input type="password" name="old" required autocomplete="current-password"></label>
+  <label>Password baru (min. 8 karakter)<input type="password" name="new" required minlength="8" autocomplete="new-password"></label>
+  <div class="full"><button class="btn btn-dark">Ganti Password</button></div>
+</form>
+{% endblock %}

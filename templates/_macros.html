@@ -1,0 +1,17 @@
+{% macro cover(p) %}
+{% if p.cover %}
+<img src="{{ img_url( p.cover.filename) }}" alt="{{ p.title }}" loading="lazy">
+{% else %}
+<div class="ph ph-{{ p.category }}"><span>{{ p.title[:1] }}</span></div>
+{% endif %}
+{% endmacro %}
+
+{% macro card(p) %}
+<a class="pcard" href="{{ url_for('project_detail', slug=p.slug) }}">
+  <div class="pcard-media">{{ cover(p) }}<span class="tag">{{ p.category_label }}</span></div>
+  <div class="pcard-body">
+    <h3>{{ p.title }}</h3>
+    <p class="meta">{% if p.location %}{{ p.location }}{% endif %}{% if p.location and p.year %} · {% endif %}{% if p.year %}{{ p.year }}{% endif %}</p>
+  </div>
+</a>
+{% endmacro %}

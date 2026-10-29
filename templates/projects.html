@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% from "_macros.html" import card %}
+{% block title %}Proyek — {{ S.company_name }}{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="container">
+    <p class="eyebrow">Portofolio</p>
+    <h1>Proyek Kami</h1>
+    <p class="lead">Kumpulan proyek interior hunian dan perkantoran yang telah kami kerjakan.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="filters">
+      <div class="pills">
+        <a href="{{ url_for('projects', q=q or None) }}" class="pill {{ 'on' if not cat }}">Semua</a>
+        {% for key, label in CATEGORIES.items() %}
+        <a href="{{ url_for('projects', kategori=key, q=q or None) }}" class="pill {{ 'on' if cat == key }}">{{ label }}</a>
+        {% endfor %}
+      </div>
+      <form class="search" method="get">
+        {% if cat %}<input type="hidden" name="kategori" value="{{ cat }}">{% endif %}
+        <input type="search" name="q" value="{{ q }}" placeholder="Cari proyek…">
+      </form>
+    </div>
+
+    {% if pg.items %}
+    <div class="grid-3">{% for p in pg.items %}{{ card(p) }}{% endfor %}</div>
+    {% if pg.pages > 1 %}
+    <nav class="pager">
+      {% if pg.has_prev %}<a href="{{ url_for('projects', page=pg.prev_num, kategori=cat or None, q=q or None) }}">‹</a>{% endif %}
+      {% for n in pg.iter_pages() %}
+        {% if n %}<a href="{{ url_for('projects', page=n, kategori=cat or None, q=q or None) }}" class="{{ 'on' if n == pg.page }}">{{ n }}</a>{% else %}<span>…</span>{% endif %}
+      {% endfor %}
+      {% if pg.has_next %}<a href="{{ url_for('projects', page=pg.next_num, kategori=cat or None, q=q or None) }}">›</a>{% endif %}
+    </nav>
+    {% endif %}
+    {% else %}
+    <p class="empty">Proyek tidak ditemukan.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}

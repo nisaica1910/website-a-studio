@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Kontak — {{ S.company_name }}{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="container">
+    <p class="eyebrow">Kontak</p>
+    <h1>Konsultasi Gratis</h1>
+    <p class="lead">Ceritakan kebutuhan ruang Anda. Kami akan menghubungi untuk menjadwalkan diskusi.</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container split contact">
+    <div>
+      <h3>Informasi</h3>
+      <ul class="info-list">
+        <li><b>Alamat</b><span>{{ S.address }}</span></li>
+        {% if S.phone %}<li><b>Telepon</b><span>{{ S.phone }}</span></li>{% endif %}
+        {% if S.email %}<li><b>Email</b><span>{{ S.email }}</span></li>{% endif %}
+        {% if S.instagram %}<li><b>Instagram</b><span><a href="https://instagram.com/{{ S.instagram }}" target="_blank" rel="noopener">@{{ S.instagram }}</a></span></li>{% endif %}
+      </ul>
+      {% if 'wa.me' in wa_link %}<a href="{{ wa_link }}" target="_blank" rel="noopener" class="btn btn-gold">Chat via WhatsApp</a>{% endif %}
+      {% if S.maps_embed %}<iframe class="map" src="{{ S.maps_embed }}" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>{% endif %}
+    </div>
+
+    <form method="post" class="form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="text" name="website_url" class="hp" tabindex="-1" autocomplete="off">
+      <label>Nama *<input name="name" required maxlength="120"></label>
+      <div class="two">
+        <label>Email<input type="email" name="email" maxlength="160"></label>
+        <label>No. HP / WhatsApp<input name="phone" maxlength="40"></label>
+      </div>
+      <label>Pesan *<textarea name="body" rows="6" required maxlength="4000" placeholder="Jenis ruang, perkiraan luas, lokasi, dan kebutuhan Anda…"></textarea></label>
+      <button class="btn btn-dark" type="submit">Kirim Pesan</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

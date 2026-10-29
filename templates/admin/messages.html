@@ -1,0 +1,26 @@
+{% extends "admin/base.html" %}
+{% block title %}Pesan{% endblock %}
+{% block content %}
+<div class="topbar"><h1>Pesan Masuk <small>({{ items|length }})</small></h1></div>
+<div class="panel nopad">
+<table class="tbl big">
+  <thead><tr><th>Pengirim</th><th>Pesan</th><th>Tanggal</th><th class="r">Aksi</th></tr></thead>
+  <tbody>
+  {% for m in items %}
+  <tr class="{{ '' if m.is_read else 'unread' }}">
+    <td><a href="{{ url_for('admin_message_view', mid=m.id) }}"><b>{{ m.name }}</b></a>{% if not m.is_read %} <span class="badge new">Baru</span>{% endif %}
+        <div class="muted">{{ m.phone or m.email or '' }}</div></td>
+    <td class="muted">{{ m.body[:90] }}{% if m.body|length > 90 %}…{% endif %}</td>
+    <td class="muted">{{ m.created_at.strftime('%d %b %Y %H:%M') }}</td>
+    <td class="r">
+      <a href="{{ url_for('admin_message_view', mid=m.id) }}" class="btn btn-sm btn-light">Buka</a>
+      <form method="post" action="{{ url_for('admin_message_delete', mid=m.id) }}" class="inline" onsubmit="return confirm('Hapus pesan ini?')">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm btn-danger">Hapus</button>
+      </form>
+    </td>
+  </tr>
+  {% else %}<tr><td colspan="4" class="muted center">Belum ada pesan.</td></tr>{% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

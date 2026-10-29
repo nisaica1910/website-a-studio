@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Tentang Kami — {{ S.company_name }}{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="container">
+    <p class="eyebrow">Tentang</p>
+    <h1>{{ S.company_name }}</h1>
+    <p class="lead">{{ S.tagline }} · Architecture · Interior · Civil</p>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container split">
+    <div class="prose prewrap">{{ S.about_text }}</div>
+    <div class="values">
+      <div class="value"><h4>Terukur</h4><p>Jadwal dan anggaran dipantau dari awal hingga akhir.</p></div>
+      <div class="value"><h4>Presisi</h4><p>Detail desain diterjemahkan akurat ke pengerjaan lapangan.</p></div>
+      <div class="value"><h4>Transparan</h4><p>Komunikasi terbuka dengan klien di setiap tahap proyek.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container cta-in">
+    <h2>Mari diskusikan proyek Anda</h2>
+    <p>Konsultasi awal gratis tanpa komitmen.</p>
+    <a href="{{ wa_link }}" class="btn btn-gold" {% if 'wa.me' in wa_link %}target="_blank" rel="noopener"{% endif %}>Hubungi Kami</a>
+  </div>
+</section>
+{% endblock %}

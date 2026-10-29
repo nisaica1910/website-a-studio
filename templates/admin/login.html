@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Login Admin — {{ S.company_name }}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body class="login-body">
+  <form method="post" class="login-card">
+    <h1>{{ S.company_name }}</h1>
+    <p>Masuk ke panel admin</p>
+    {% with msgs = get_flashed_messages(with_categories=true) %}
+    {% for c, m in msgs %}<div class="flash {{ c }}">{{ m }}</div>{% endfor %}
+    {% endwith %}
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <label>Username<input name="username" autofocus required autocomplete="username"></label>
+    <label>Password<input type="password" name="password" required autocomplete="current-password"></label>
+    <button class="btn btn-gold btn-block">Masuk</button>
+    <a href="{{ url_for('index') }}" class="back-site">← Kembali ke website</a>
+  </form>
+</body>
+</html>

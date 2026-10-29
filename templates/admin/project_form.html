@@ -1,0 +1,75 @@
+{% extends "admin/base.html" %}
+{% block title %}{{ 'Proyek Baru' if is_new else 'Edit Proyek' }}{% endblock %}
+{% block content %}
+<div class="topbar">
+  <h1>{{ 'Proyek Baru' if is_new else p.title }}</h1>
+  <a href="{{ url_for('admin_projects') }}" class="btn btn-light">← Kembali</a>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="panel form-grid">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  <label class="full">Nama proyek *
+    <input name="title" value="{{ p.title or '' }}" required maxlength="160" placeholder="contoh: TEKMIRA LEMIGAS">
+  </label>
+
+  <label>Kategori *
+    <select name="category">
+      {% for k, l in CATEGORIES.items() %}<option value="{{ k }}" {{ 'selected' if p.category == k }}>{{ l }}</option>{% endfor %}
+    </select>
+  </label>
+  <label>Klien <input name="client" value="{{ p.client or '' }}" maxlength="160"></label>
+  <label>Lokasi <input name="location" value="{{ p.location or '' }}" maxlength="160" placeholder="Jakarta Selatan"></label>
+  <label>Tahun <input name="year" value="{{ p.year or '' }}" inputmode="numeric" maxlength="4" placeholder="2025"></label>
+  <label>Luas <input name="area" value="{{ p.area or '' }}" maxlength="60" placeholder="250 m²"></label>
+  <label>Lingkup pekerjaan <input name="scope" value="{{ p.scope or '' }}" maxlength="160" placeholder="Desain & Build"></label>
+
+  <label class="full">Ringkasan singkat (maks. 300 karakter)
+    <input name="summary" value="{{ p.summary or '' }}" maxlength="300">
+  </label>
+  <label class="full">Deskripsi proyek
+    <textarea name="description" rows="8">{{ p.description or '' }}</textarea>
+  </label>
+
+  <label class="full">Tambah foto (boleh pilih banyak sekaligus; JPG / PNG / WEBP)
+    <input type="file" name="images" accept="image/*" multiple id="fileInput">
+    <small class="muted" id="fileInfo">Foto otomatis dikecilkan ke maks. 1920px agar website tetap ringan.</small>
+  </label>
+
+  <div class="full checks">
+    <label class="check"><input type="checkbox" name="is_published" {{ 'checked' if p.is_published }}> Tayangkan di website</label>
+    <label class="check"><input type="checkbox" name="is_featured" {{ 'checked' if p.is_featured }}> Tampilkan di beranda (unggulan)</label>
+  </div>
+
+  <div class="full"><button class="btn btn-gold">{{ 'Simpan Proyek' if is_new else 'Simpan Perubahan' }}</button></div>
+</form>
+
+{% if not is_new %}
+<section class="panel" id="galeri">
+  <h2>Galeri ({{ p.images|length }} foto)</h2>
+  {% if p.images %}
+  <div class="gal">
+    {% for img in p.images %}
+    <div class="gal-item">
+      <img src="{{ img_url( img.filename) }}" alt="">
+      {% if img.is_cover %}<span class="badge star cover-badge">Cover</span>{% endif %}
+      <div class="gal-actions">
+        {% if not loop.first %}<form method="post" action="{{ url_for('admin_image_move', iid=img.id, direction='kiri') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button title="Geser maju">←</button></form>{% endif %}
+        {% if not loop.last %}<form method="post" action="{{ url_for('admin_image_move', iid=img.id, direction='kanan') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button title="Geser mundur">→</button></form>{% endif %}
+        {% if not img.is_cover %}<form method="post" action="{{ url_for('admin_image_cover', iid=img.id) }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button>Jadikan cover</button></form>{% endif %}
+        <form method="post" action="{{ url_for('admin_image_delete', iid=img.id) }}" onsubmit="return confirm('Hapus foto ini?')"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="del">Hapus</button></form>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}<p class="muted">Belum ada foto. Unggah lewat form di atas.</p>{% endif %}
+</section>
+{% endif %}
+
+<script>
+  var fi = document.getElementById('fileInput');
+  if (fi) fi.addEventListener('change', function () {
+    document.getElementById('fileInfo').textContent = fi.files.length + ' file dipilih.';
+  });
+</script>
+{% endblock %}

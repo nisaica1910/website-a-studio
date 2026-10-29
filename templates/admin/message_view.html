@@ -1,0 +1,13 @@
+{% extends "admin/base.html" %}
+{% block title %}Pesan dari {{ m.name }}{% endblock %}
+{% block content %}
+<div class="topbar"><h1>Pesan dari {{ m.name }}</h1><a href="{{ url_for('admin_messages') }}" class="btn btn-light">← Kembali</a></div>
+<section class="panel">
+  <dl class="kv">
+    <dt>Tanggal</dt><dd>{{ m.created_at.strftime('%d %B %Y, %H:%M') }} UTC</dd>
+    <dt>Email</dt><dd>{% if m.email %}<a href="mailto:{{ m.email }}">{{ m.email }}</a>{% else %}-{% endif %}</dd>
+    <dt>Telepon</dt><dd>{{ m.phone or '-' }}</dd>
+  </dl>
+  <div class="msg-body">{{ m.body }}</div>
+</section>
+{% endblock %}

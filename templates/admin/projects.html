@@ -1,0 +1,49 @@
+{% extends "admin/base.html" %}
+{% block title %}Proyek{% endblock %}
+{% block content %}
+<div class="topbar"><h1>Proyek <small>({{ items|length }})</small></h1><a href="{{ url_for('admin_project_new') }}" class="btn btn-gold">+ Proyek Baru</a></div>
+
+<form class="toolbar" method="get">
+  <select name="kategori" onchange="this.form.submit()">
+    <option value="">Semua kategori</option>
+    {% for k, l in CATEGORIES.items() %}<option value="{{ k }}" {{ 'selected' if cat == k }}>{{ l }}</option>{% endfor %}
+  </select>
+  <input type="search" name="q" value="{{ q }}" placeholder="Cari nama / klien…">
+  <button class="btn btn-dark btn-sm">Cari</button>
+</form>
+
+<div class="panel nopad">
+<table class="tbl big">
+  <thead><tr><th></th><th>Nama Proyek</th><th>Kategori</th><th>Tahun</th><th>Status</th><th class="r">Aksi</th></tr></thead>
+  <tbody>
+  {% for p in items %}
+  <tr>
+    <td class="thumb">{% if p.cover %}<img src="{{ img_url( p.cover.filename) }}" alt="">{% else %}<div class="thumb-ph ph-{{ p.category }}"></div>{% endif %}</td>
+    <td><a href="{{ url_for('admin_project_edit', pid=p.id) }}"><b>{{ p.title }}</b></a>
+        <div class="muted">{{ p.images|length }} foto{% if p.location %} · {{ p.location }}{% endif %}</div></td>
+    <td>{{ p.category_label }}</td>
+    <td>{{ p.year or '-' }}</td>
+    <td>
+      <form method="post" action="{{ url_for('admin_project_toggle', pid=p.id, field='published') }}" class="inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="badge {{ 'ok' if p.is_published else 'off' }}" title="Klik untuk ubah">{{ 'Tayang' if p.is_published else 'Draft' }}</button>
+      </form>
+      <form method="post" action="{{ url_for('admin_project_toggle', pid=p.id, field='featured') }}" class="inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="badge {{ 'star' if p.is_featured else 'off' }}" title="Tampil di beranda">{{ '★ Unggulan' if p.is_featured else '☆' }}</button>
+      </form>
+    </td>
+    <td class="r">
+      <a href="{{ url_for('admin_project_edit', pid=p.id) }}" class="btn btn-sm btn-light">Edit</a>
+      {% if p.is_published %}<a href="{{ url_for('project_detail', slug=p.slug) }}" target="_blank" class="btn btn-sm btn-light">Lihat</a>{% endif %}
+      <form method="post" action="{{ url_for('admin_project_delete', pid=p.id) }}" class="inline" onsubmit="return confirm('Hapus proyek ini beserta semua fotonya?')">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn btn-sm btn-danger">Hapus</button>
+      </form>
+    </td>
+  </tr>
+  {% else %}<tr><td colspan="6" class="muted center">Tidak ada proyek.</td></tr>{% endfor %}
+  </tbody>
+</table>
+</div>
+{% endblock %}

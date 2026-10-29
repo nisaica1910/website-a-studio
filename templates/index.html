@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% from "_macros.html" import card, cover %}
+
+{% block content %}
+<section class="hero" {% if hero_project and hero_project.cover %}style="--hero-img:url('{{ img_url( hero_project.cover.filename) }}')"{% endif %}>
+  <div class="container hero-in">
+    <p class="eyebrow">{{ S.tagline }}</p>
+    <h1>{{ S.hero_title }}</h1>
+    <p class="lead">{{ S.hero_subtitle }}</p>
+    <div class="hero-cta">
+      <a href="{{ url_for('projects') }}" class="btn btn-gold">Lihat Proyek</a>
+      <a href="{{ wa_link }}" class="btn btn-outline-light" {% if 'wa.me' in wa_link %}target="_blank" rel="noopener"{% endif %}>Konsultasi Gratis</a>
+    </div>
+  </div>
+</section>
+
+<section class="stats">
+  <div class="container stats-grid">
+    <div><strong>{{ total }}{% if total >= 20 %}+{% endif %}</strong><span>Proyek Selesai</span></div>
+    <div><strong>3</strong><span>Layanan: Interior, Sipil, Custom Furniture</span></div>
+    <div><strong>2</strong><span>Segmen: Hunian &amp; Perkantoran</span></div>
+    <div><strong>1</strong><span>Tim dari Desain sampai Build</span></div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container split">
+    <div class="reveal">
+      <p class="eyebrow dark">Tentang Kami</p>
+      <h2>Desain dan konstruksi dalam satu tangan</h2>
+      <p class="prewrap">{{ S.about_text.split('\n\n')[0] }}</p>
+      <a href="{{ url_for('about') }}" class="link-arrow">Selengkapnya →</a>
+    </div>
+    <div class="cat-cards reveal">
+      {% for key, label in CATEGORIES.items() %}
+      <a href="{{ url_for('projects', kategori=key) }}" class="cat-card cat-{{ key }}">
+        <span class="cat-count">{{ counts[key] }} proyek</span>
+        <h3>{{ label }}</h3>
+        <span class="link-arrow light">Lihat semua →</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="container">
+    <div class="sec-head reveal">
+      <p class="eyebrow dark">Layanan</p>
+      <h2>Yang kami kerjakan</h2>
+    </div>
+    <div class="grid-3">
+      <article class="service reveal"><span class="num">01</span><h3>Desain Interior &amp; Arsitektur</h3><p>Konsep, layout, dan visualisasi 3D yang jelas sebelum pengerjaan dimulai.</p></article>
+      <article class="service reveal"><span class="num">02</span><h3>Kontraktor Interior &amp; Sipil</h3><p>Pelaksanaan lapangan dengan pengawasan, jadwal, dan anggaran yang terukur.</p></article>
+      <article class="service reveal"><span class="num">03</span><h3>Custom Furniture</h3><p>Lemari, kitchen set, meja kerja, hingga furnitur khusus sesuai ukuran ruang.</p></article>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="sec-head row reveal">
+      <div><p class="eyebrow dark">Portofolio</p><h2>Proyek pilihan</h2></div>
+      <a href="{{ url_for('projects') }}" class="link-arrow">Semua proyek →</a>
+    </div>
+    {% if featured %}
+    <div class="grid-3">{% for p in featured %}{{ card(p) }}{% endfor %}</div>
+    {% else %}<p class="empty">Belum ada proyek yang dipublikasikan.</p>{% endif %}
+  </div>
+</section>
+
+<section class="section alt">
+  <div class="container">
+    <div class="sec-head reveal"><p class="eyebrow dark">Proses Kerja</p><h2>Dari ide sampai serah terima</h2></div>
+    <div class="steps">
+      <div class="step reveal"><b>1</b><h4>Konsultasi</h4><p>Diskusi kebutuhan, gaya, dan anggaran.</p></div>
+      <div class="step reveal"><b>2</b><h4>Desain 3D</h4><p>Layout, material, dan visual ruang.</p></div>
+      <div class="step reveal"><b>3</b><h4>Produksi &amp; Build</h4><p>Pengerjaan sipil, interior, dan furniture.</p></div>
+      <div class="step reveal"><b>4</b><h4>Serah Terima</h4><p>Pengecekan akhir dan garansi pekerjaan.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="container cta-in">
+    <h2>Punya rencana renovasi atau ruang baru?</h2>
+    <p>Konsultasi awal gratis. Ceritakan kebutuhan Anda, kami bantu dari konsep hingga terbangun.</p>
+    <a href="{{ wa_link }}" class="btn btn-gold" {% if 'wa.me' in wa_link %}target="_blank" rel="noopener"{% endif %}>Hubungi Kami</a>
+  </div>
+</section>
+{% endblock %}

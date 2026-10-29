@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% from "_macros.html" import card, cover %}
+{% block title %}{{ p.title }} — {{ S.company_name }}{% endblock %}
+{% block desc %}{{ p.summary or (p.title ~ ' — proyek ' ~ p.category_label ~ ' oleh ' ~ S.company_name) }}{% endblock %}
+
+{% block content %}
+<section class="page-head">
+  <div class="container">
+    <a href="{{ url_for('projects', kategori=p.category) }}" class="back">← {{ p.category_label }}</a>
+    <h1>{{ p.title }}</h1>
+    {% if p.summary %}<p class="lead">{{ p.summary }}</p>{% endif %}
+  </div>
+</section>
+
+<section class="section">
+  <div class="container detail">
+    <div class="detail-main">
+      {% if p.images %}
+      <div class="gallery" data-lightbox>
+        {% for img in p.images %}
+        <a href="{{ img_url( img.filename) }}" class="g-item {{ 'g-big' if loop.first }}">
+          <img src="{{ img_url( img.filename) }}" alt="{{ p.title }} {{ loop.index }}" loading="lazy">
+        </a>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="ph-wide ph-{{ p.category }}"><span>{{ p.title[:1] }}</span><small>Foto proyek belum diunggah</small></div>
+      {% endif %}
+      {% if p.description %}<div class="prose prewrap">{{ p.description }}</div>{% endif %}
+    </div>
+
+    <aside class="detail-side">
+      <h3>Informasi Proyek</h3>
+      <dl>
+        <dt>Kategori</dt><dd>{{ p.category_label }}</dd>
+        {% if p.client %}<dt>Klien</dt><dd>{{ p.client }}</dd>{% endif %}
+        {% if p.location %}<dt>Lokasi</dt><dd>{{ p.location }}</dd>{% endif %}
+        {% if p.year %}<dt>Tahun</dt><dd>{{ p.year }}</dd>{% endif %}
+        {% if p.area %}<dt>Luas</dt><dd>{{ p.area }}</dd>{% endif %}
+        {% if p.scope %}<dt>Lingkup</dt><dd>{{ p.scope }}</dd>{% endif %}
+      </dl>
+      <a href="{{ wa_link }}" class="btn btn-gold btn-block" {% if 'wa.me' in wa_link %}target="_blank" rel="noopener"{% endif %}>Konsultasi Proyek Serupa</a>
+    </aside>
+  </div>
+</section>
+
+{% if related %}
+<section class="section alt">
+  <div class="container">
+    <div class="sec-head"><h2>Proyek terkait</h2></div>
+    <div class="grid-3">{% for r in related %}{{ card(r) }}{% endfor %}</div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}
